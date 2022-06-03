@@ -1,13 +1,13 @@
 ﻿using Host.Domain;
 
-namespace Host.Services.Services
+namespace Host.Services.Tasks
 {
-    public class Test : ServiceBase
+    public class SecondTest : ServiceBase
     {
-        public Test() : base()
+        public SecondTest() : base()
         {
             Id = Guid.NewGuid();
-            Name = "TestBot";
+            Name = "TestBot the Second";
             Description = "Alla Turca";
         }
 
@@ -15,7 +15,7 @@ namespace Host.Services.Services
         {
             IsRunning = true;
 
-            for (int i = 13; i > 0; i--)
+            for (int i = 17; i > 0; i--)
             {
                 Thread.Sleep(1000);
             }
