@@ -1,13 +1,14 @@
-﻿using Host.Tests;
+﻿using Host.Domain.CustomEventArgs;
+using Host.Tests;
 using Service.Host;
 
 var host = new ServiceHost();
 host.HostStarted += DisplayHelper.EventCenter;
-host.HostStopped += DisplayHelper.EventCenter;
 host.LoadedServiceList += DisplayHelper.EventCenter;
 host.ServiceStarted += DisplayHelper.EventCenter;
 host.ServiceStopped += DisplayHelper.EventCenter;
 host.StoppedServiceList += DisplayHelper.EventCenter;
+host.HostStopped += DisplayHelper.EventCenter;
 
 try
 {
@@ -21,4 +22,3 @@ finally
 {
     Console.WriteLine("END!");
 }
-

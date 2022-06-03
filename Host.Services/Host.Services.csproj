@@ -10,8 +10,4 @@
     <ProjectReference Include="..\Host.Domain\Host.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Addons\" />
-  </ItemGroup>
-
 </Project>

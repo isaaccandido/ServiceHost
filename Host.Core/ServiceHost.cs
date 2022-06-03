@@ -1,5 +1,6 @@
 ﻿using Host.Core.Helpers;
 using Host.Domain.CustomEventArgs;
+using Host.Domain.Enums;
 using Host.Domain.Interfaces;
 
 namespace Service.Host
@@ -11,41 +12,58 @@ namespace Service.Host
 
         public event EventHandler<ServiceStartedEventArgs> ServiceStarted;
         public event EventHandler<ServiceStoppedEventArgs> ServiceStopped;
-        public event EventHandler<StoppedServicesListEventArgs> StoppedServiceList;
+
         public event EventHandler<LoadedServicesListEventArgs> LoadedServiceList;
+        public event EventHandler<LoadedAddonsListEventArgs> LoadedAddonList;
 
-        public bool IsRunning { get; set; }
+        public event EventHandler<StoppedServicesListEventArgs> StoppedServiceList;
+        
 
-        private readonly List<IService> _services;
-        private readonly CancellationTokenSource _cancellationToken;
+        public bool IsRunning { get; private set; }
+
+        private List<IService> _services = new();
+        private List<IAddon> _addons = new();
+
+        private readonly CancellationTokenSource _cancellationToken = new();
 
         public ServiceHost()
         {
-            _cancellationToken = new();
-            _services = new();
-
-            _services = InitHelper.GetServiceInstances<IService>()
-                                  .ToList();
-
-            _services.ForEach(service => service.CancellationToken = _cancellationToken);
-
-            if (_services.Count is 0) throw new Exception("No services were found to run.");
+            LoadAddons();
+            InjectCancellationToken();
         }
 
         public async void Run()
         {
             IsRunning = true;
-
             HostStarted?.Invoke(this, new BootEventArgs());
-            LoadedServiceList?.Invoke(this, new LoadedServicesListEventArgs(_services));
 
             await ServiceRunner();
 
             HostStopped?.Invoke(this, new HaltEventArgs());
-
             IsRunning = false;
         }
 
+        private void LoadAddons()
+        {
+            {
+                _services = InitHelper.GetInstancesFromType<IService>(AssemblyItem.Services).ToList();
+                
+                if (_services.Count is 0) throw new Exception("No services were found to run.");
+
+                LoadedServiceList?.Invoke(this, new LoadedServicesListEventArgs(_services));
+            }
+            {
+                _addons = InitHelper.GetInstancesFromType<IAddon>(AssemblyItem.Services).ToList();
+
+                if (_addons.Count is 0) throw new Exception("No services were found to run.");
+
+                LoadedAddonList?.Invoke(this, new LoadedAddonsListEventArgs(_addons));
+            }
+        }
+        private void InjectCancellationToken()
+        {
+            _services.ForEach(service => service.CancellationToken = _cancellationToken);
+        }
         private Task ServiceRunner()
         {
             _services.ForEach(service => Task.Run(() =>
@@ -54,7 +72,7 @@ namespace Service.Host
                 service.Start();
             }));
 
-            while(!_services.Any(service => service.IsRunning)) continue;
+            while (!_services.Any(service => service.IsRunning)) continue;
 
             ServiceStatusListener();
 
