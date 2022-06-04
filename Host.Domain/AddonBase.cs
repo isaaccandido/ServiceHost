@@ -2,11 +2,8 @@
 
 namespace Host.Domain
 {
-    public class AddonBase : IAddon
+    public abstract class AddonBase : IAddon
     {
-        public void Run()
-        {
-
-        }
+        public virtual void Run() { }
     }
 }
