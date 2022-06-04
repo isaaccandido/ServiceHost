@@ -14,11 +14,11 @@ namespace Host.Core.Helpers
         /// <returns>List of found and instantied objects.</returns>
         internal static IEnumerable<T> GetInstancesFromType<T>(AssemblyItem assembly)
         {
-            return Assembly.Load((assembly.GetType()
-                                          .GetField(assembly.ToString())
-                                          .GetCustomAttributes<DescriptionAttribute>(false)
-                                 )?.First()
-                                   .Description)
+            return Assembly.Load(assembly.GetType()
+                                         .GetField(assembly.ToString())
+                                         .GetCustomAttributes<DescriptionAttribute>(false)
+                                         ?.First()
+                                         .Description)
                            .GetTypes()
                            .Where(type => type.IsClass)
                            .Where(type => !type.IsAbstract)
