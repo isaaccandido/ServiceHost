@@ -8,7 +8,7 @@ namespace Host.Domain.CustomEventArgs
 
         public ServiceStoppedEventArgs(IService service)
         {
-            this.Service = service;
+            Service = service;
         }
     }
 }

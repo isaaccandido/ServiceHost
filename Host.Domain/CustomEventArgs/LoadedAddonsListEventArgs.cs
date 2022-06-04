@@ -8,7 +8,7 @@ namespace Host.Domain.CustomEventArgs
 
         public LoadedAddonsListEventArgs(IEnumerable<IAddon> services)
         {
-            this.Services = services.ToList();
+            Services = services.ToList();
         }
     }
 }
