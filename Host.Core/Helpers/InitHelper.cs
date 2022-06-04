@@ -16,7 +16,7 @@ namespace Host.Core.Helpers
         {
             return Assembly.Load((assembly.GetType()
                                           .GetField(assembly.ToString())
-                                          .GetCustomAttributes(typeof(DescriptionAttribute), false) as IEnumerable<DescriptionAttribute>
+                                          .GetCustomAttributes<DescriptionAttribute>(false)
                                  )?.First()
                                    .Description)
                            .GetTypes()
