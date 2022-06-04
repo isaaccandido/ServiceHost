@@ -10,52 +10,42 @@ namespace Host.Tests
         {
             lock (lockObj)
             {
-                var type = typeof(TEventArgs);
-
-                if (type.Equals(typeof(LoadedServicesListEventArgs)))
+                if (e is LoadedServicesListEventArgs lslArgs)
                 {
-                    var eventArg = e as LoadedServicesListEventArgs;
-
                     Console.ForegroundColor = ConsoleColor.Blue;
                     Console.WriteLine("Services Loaded:");
-                    eventArg.Services.ForEach(service => Console.WriteLine($"> {service.Name}"));
+                    lslArgs.Services.ForEach(service => Console.WriteLine($"> {service.Name}"));
                     Console.WriteLine();
 
                     Console.ResetColor();
                 }
-                else if (type.Equals(typeof(ServiceStartedEventArgs)))
+                else if (e is ServiceStartedEventArgs ssArgs)
                 {
-                    var eventArg = e as ServiceStartedEventArgs;
-
                     Console.ForegroundColor = ConsoleColor.Green;
-                    Console.WriteLine($"> Service Started: {eventArg.Service.Name}");
+                    Console.WriteLine($"> Service Started: {ssArgs.Service.Name}");
                     Console.ResetColor();
                 }
-                else if (type.Equals(typeof(ServiceStoppedEventArgs)))
+                else if (e is ServiceStoppedEventArgs stArgs)
                 {
-                    var eventArg = e as ServiceStoppedEventArgs;
-
                     Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine($"> Service Stopped: {eventArg.Service.Name}");
+                    Console.WriteLine($"> Service Stopped: {stArgs.Service.Name}");
                     Console.ResetColor();
                 }
-                else if (type.Equals(typeof(StoppedServicesListEventArgs)))
+                else if (e is StoppedServicesListEventArgs stsArgs)
                 {
-                    var eventArg = e as StoppedServicesListEventArgs;
-
                     Console.ForegroundColor = ConsoleColor.Yellow;
                     Console.WriteLine();
                     Console.WriteLine("Stopped services:");
-                    eventArg.Services.ForEach(service => Console.WriteLine($"> {service.Name}"));
+                    stsArgs.Services.ForEach(service => Console.WriteLine($"> {service.Name}"));
                     Console.WriteLine();
                     Console.ResetColor();
                 }
-                else if (type.Equals(typeof(HaltEventArgs)))
+                else if (e is HaltEventArgs hArgs)
                 {
                     Console.ResetColor();
                     Console.WriteLine("Finished ServiceHost software...");
                 }
-                else if (type.Equals(typeof(BootEventArgs)))
+                else if (e is BootEventArgs bArgs)
                 {
                     Console.ResetColor();
                     Console.WriteLine("Booting up ServiceHost software...");
