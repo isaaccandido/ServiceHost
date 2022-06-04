@@ -1,5 +1,4 @@
-﻿using Host.Domain.CustomEventArgs;
-using Host.Tests;
+﻿using Host.Tests;
 using Service.Host;
 
 var host = new ServiceHost();

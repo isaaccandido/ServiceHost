@@ -8,7 +8,7 @@ namespace Host.Domain.CustomEventArgs
 
         public LoadedServicesListEventArgs(IEnumerable<IService> services)
         {
-            this.Services = services.ToList();
+            Services = services.ToList();
         }
     }
 }
